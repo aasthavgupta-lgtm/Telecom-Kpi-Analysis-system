@@ -1,0 +1,26 @@
+{
+    "kpi_analysis": {
+        "availability_status": "degraded",
+        "cssr_status": "warning",
+        "latency_status": "critical",
+        "packet_loss_status": "critical",
+        "drop_rate_status": "critical",
+        "overall_network_health": "poor"
+    },
+    "baseline_analysis": {
+        "availability_deviation_pct": 0,
+        "cssr_deviation_pct": 0,
+        "drop_rate_deviation_pct": 36.8
+    },
+    "severity_classification": {
+        "severity": "CRITICAL"
+    },
+    "possible_root_causes": [
+        "network congestion",
+        "packet loss",
+        "radio instability",
+        "site downtime",
+        "high latency",
+        "drop rate issues"
+    ]
+}
