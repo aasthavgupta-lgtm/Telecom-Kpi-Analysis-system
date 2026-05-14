@@ -168,7 +168,14 @@ root_cause_task = Task(
 
     {telecom_data}
 
-    Infer possible operational root causes.
+    Infer detailed telecom operational root causes.
+
+    Requirements:
+    - Link causes to KPI metrics
+    - Mention affected geo segments
+    - Explain KPI relationships
+    - Avoid generic RCA statements
+    - Use threshold-based reasoning
 
     Consider:
     - latency

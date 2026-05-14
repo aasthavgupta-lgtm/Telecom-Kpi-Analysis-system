@@ -5,6 +5,13 @@ from preprocessing import (
     preprocess_kpi_data,
     build_ai_summary
 )
+import os
+import certifi
+
+os.environ["SSL_CERT_FILE"] = certifi.where()
+os.environ["REQUESTS_CA_BUNDLE"] = certifi.where()
+os.environ["CURL_CA_BUNDLE"] = certifi.where()
+os.environ["OTEL_SDK_DISABLED"] = "true"
 
 from crew import telecom_kpi_crew
 
@@ -39,12 +46,15 @@ def main():
     # ---------------------------------
 
     if df.empty:
+
         print("\nNo records found.")
+
         return
 
     print(f"\nTotal Records Found: {len(df)}")
 
     print("\nFiltered Data Preview:\n")
+
     print(df.head())
 
     # ---------------------------------
@@ -56,6 +66,17 @@ def main():
     # ---------------------------------
     # BUILD AI SUMMARY
     # ---------------------------------
+
+    flag = int(input(
+        "\nDo you want to build AI summary? "
+        "(1 for Yes, 0 for No): "
+    ))
+
+    if flag == 0:
+
+        print("\nSkipping AI summary generation.")
+
+        return
 
     ai_summary = build_ai_summary(processed_records)
 
@@ -69,13 +90,10 @@ def main():
 
     for task in telecom_kpi_crew.tasks:
 
-        task.description += f"""
-
-        TELECOM KPI INTELLIGENCE SUMMARY:
-
-        {json.dumps(ai_summary, indent=4)}
-
-        """
+        task.description = task.description.replace(
+            "{telecom_data}",
+            json.dumps(ai_summary, indent=4)
+        )
 
     # ---------------------------------
     # RUN CREW AI ANALYSIS
@@ -87,7 +105,28 @@ def main():
 
     for task in telecom_kpi_crew.tasks:
 
-        print(f"\nRunning Task: {task.agent.role}\n")
+        # ---------------------------------
+        # ASK USER BEFORE EXECUTION
+        # ---------------------------------
+
+        flag = int(input(
+            f"\nRun Agent: {task.agent.role} ? "
+            "(1 = Yes, 0 = No): "
+        ))
+
+        if flag == 0:
+
+            print(f"\nSkipping {task.agent.role}...\n")
+
+            continue
+
+        # ---------------------------------
+        # EXECUTE AGENT
+        # ---------------------------------
+
+        print("\n====================================")
+        print(f"AGENT: {task.agent.role}")
+        print("====================================\n")
 
         output = task.execute_sync()
 
@@ -110,6 +149,14 @@ def main():
         raw_output = raw_output.strip()
 
         # ---------------------------------
+        # PRINT RAW OUTPUT
+        # ---------------------------------
+
+        print("\nAgent Output:\n")
+
+        print(raw_output)
+
+        # ---------------------------------
         # PARSE JSON
         # ---------------------------------
 
@@ -126,6 +173,21 @@ def main():
             print("\nRaw Output:\n")
 
             print(raw_output)
+
+        # ---------------------------------
+        # CONTINUE OPTION
+        # ---------------------------------
+
+        proceed = int(input(
+            "\nContinue to next agent? "
+            "(1 = Yes, 0 = Stop): "
+        ))
+
+        if proceed == 0:
+
+            print("\nStopping CrewAI execution.\n")
+
+            break
 
     # ---------------------------------
     # MERGE ALL AGENT OUTPUTS

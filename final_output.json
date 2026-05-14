@@ -7,20 +7,118 @@
         "drop_rate_status": "critical",
         "overall_network_health": "poor"
     },
+    "degraded_kpis": {
+        "availability": true,
+        "cssr": true,
+        "latency": true,
+        "packet_loss": true,
+        "drop_rate": true
+    },
+    "operational_kpi_health": {
+        "availability": "degraded",
+        "cssr": "warning",
+        "latency": "critical",
+        "packet_loss": "critical",
+        "drop_rate": "critical"
+    },
+    "abnormal_telecom_behavior": {
+        "high_latency_and_packet_loss": true,
+        "call_failures": true,
+        "network_congestion": true,
+        "session_instability": true
+    },
     "baseline_analysis": {
-        "availability_deviation_pct": 0,
-        "cssr_deviation_pct": 0,
-        "drop_rate_deviation_pct": 36.8
+        "availability_deviation_pct": -7.97,
+        "cssr_deviation_pct": -2.99,
+        "drop_rate_deviation_pct": 189.0
+    },
+    "sla_validation": {
+        "availability_sla_breach": true,
+        "cssr_sla_breach": true,
+        "drop_rate_sla_breach": true
     },
     "severity_classification": {
         "severity": "CRITICAL"
     },
-    "possible_root_causes": [
-        "network congestion",
-        "packet loss",
-        "radio instability",
-        "site downtime",
-        "high latency",
-        "drop rate issues"
-    ]
+    "root_cause_analysis": {
+        "root_causes": [
+            {
+                "cause": "Network Congestion",
+                "description": "High drop rate (2.89%) and packet loss (5.37%) indicating network congestion, leading to increased latency (150.11 ms) and reduced CSSR",
+                "kpi_links": [
+                    "drop_rate_status",
+                    "packet_loss_status",
+                    "latency_status"
+                ],
+                "thresholds": {
+                    "drop_rate": "2.89% (above threshold)",
+                    "packet_loss": "5.37% (above threshold)",
+                    "latency": "150.11 ms (above threshold)"
+                },
+                "geo_impact": [
+                    "HYDERABAD"
+                ],
+                "kpi_relationships": [
+                    "High latency and packet loss leading to increased call failures",
+                    "Call failures resulting in increased drop rate and reduced CSSR"
+                ]
+            },
+            {
+                "cause": "Packet Loss",
+                "description": "High packet loss (5.37%) causing session instability, leading to increased call failures and reduced CSSR",
+                "kpi_links": [
+                    "packet_loss_status",
+                    "cssr_status"
+                ],
+                "thresholds": {
+                    "packet_loss": "5.37% (above threshold)",
+                    "cssr": "-2.99% (below threshold)"
+                },
+                "geo_impact": [
+                    "HYDERABAD"
+                ],
+                "kpi_relationships": [
+                    "High latency and packet loss leading to increased call failures",
+                    "Call failures resulting in increased drop rate and reduced CSSR"
+                ]
+            },
+            {
+                "cause": "Radio Instability",
+                "description": "High latency (150.11 ms) and packet loss (5.37%) indicating radio instability, leading to reduced CSSR and increased drop rate",
+                "kpi_links": [
+                    "latency_status",
+                    "packet_loss_status"
+                ],
+                "thresholds": {
+                    "latency": "150.11 ms (above threshold)",
+                    "packet_loss": "5.37% (above threshold)"
+                },
+                "geo_impact": [
+                    "HYDERABAD"
+                ],
+                "kpi_relationships": [
+                    "High latency and packet loss leading to increased call failures",
+                    "Call failures resulting in increased drop rate and reduced CSSR"
+                ]
+            },
+            {
+                "cause": "Availability Degradation",
+                "description": "Availability degradation (91.11%) indicating possible site downtime, leading to reduced CSSR and increased drop rate",
+                "kpi_links": [
+                    "availability_status",
+                    "cssr_status"
+                ],
+                "thresholds": {
+                    "availability": "91.11% (below threshold)",
+                    "cssr": "-2.99% (below threshold)"
+                },
+                "geo_impact": [
+                    "HYDERABAD"
+                ],
+                "kpi_relationships": [
+                    "Call failures resulting in increased drop rate and reduced CSSR"
+                ]
+            }
+        ]
+    }
 }
